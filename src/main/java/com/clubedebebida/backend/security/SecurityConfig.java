@@ -18,6 +18,7 @@ public class SecurityConfig {
          http.authorizeRequests(authorizeRequests ->
             authorizeRequests
                     .requestMatchers("/error/**").permitAll()
+                    .requestMatchers("/garrafa/**").permitAll()
                 .anyRequest().permitAll());
 
          return http.build();
