@@ -58,4 +58,10 @@ public class SubscriptionController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/saldo")
+    public int getBalance(@PathVariable Long id) {
+        return subscriptionService.getBalanceById(id);
+    }
+
 }

@@ -13,22 +13,22 @@ import org.springframework.data.domain.Pageable;
 @Service
    //User getUserById(Long id);
 public class UserService {
-    private final UserRepository UserRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository UserRepository){
-        this.UserRepository = UserRepository;
+    public UserService(UserRepository userRepository){
+        this.userRepository = UserRepository;
     }
 
     public Page<UserDTO> findAll(Pageable pageable){
-        Page<User> Users = UserRepository.findAll(pageable);
+        Page<User> users = userRepository.findAll(pageable);
 
-        return Users.map(this::toDTO);
+        return users.map(this::toDTO);
     }
 
     public UserDTO findById(Long id){
-        User User = UserRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Usuário não encontrado"));
-        return toDTO(User);
+        User user = userRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Usuário não encontrado"));
+        return toDTO(user);
     }
 
     public UserDTO save(UserDTO UserDTO){
@@ -40,17 +40,17 @@ public class UserService {
 
     public UserDTO update(Long id, UserDTO UserDTO){
         try {
-            User User = UserRepository.getReferenceById(id);
-            User.setName(UserDTO.name());
-            User.setEmail(UserDTO.email());
-            User.setPhone(UserDTO.phone());
-            User.setPhoto(UserDTO.photo());
-            User.setBirthday(UserDTO.birthday());
-            User.setPassword(UserDTO.password());
-            User.setCreatedAt(UserDTO.createdAt());
-            User.setUpdatedAt(UserDTO.updatedAt());
-            User = UserRepository.save(User);
-            return toDTO(User);
+            User user = userRepository.getReferenceById(id);
+            user.setName(UserDTO.name());
+            user.setEmail(UserDTO.email());
+            user.setPhone(UserDTO.phone());
+            user.setPhoto(UserDTO.photo());
+            user.setBirthday(UserDTO.birthday());
+            user.setPassword(UserDTO.password());
+            user.setCreatedAt(UserDTO.createdAt());
+            user.setUpdatedAt(UserDTO.updatedAt());
+            user = userRepository.save(user);
+            return toDTO(user);
 
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Usuário não encontrado");
@@ -58,34 +58,34 @@ public class UserService {
     }
 
     public void delete(Long id){
-        UserRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
-    private UserDTO toDTO(User User) {
+    private UserDTO toDTO(User user) {
         return new UserDTO(
-                User.getId(),
-                User.getName(),
-                User.getEmail(),
-                User.getPhone(),
-                User.getPhoto(),
-                User.getBirthday(),
-                User.getPassword(),
-                User.getCreatedAt(),
-                User.getUpdatedAt()
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getPhoto(),
+                user.getBirthday(),
+                user.getPassword(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 
-    private User toEntity(UserDTO UserDTO){
+    private User toEntity(UserDTO userDTO){
         return new User(
-                UserDTO.id(),
-                UserDTO.name(),
-                UserDTO.email(),
-                UserDTO.phone(),
-                UserDTO.photo(),
-                UserDTO.birthday(),
-                UserDTO.password(),
-                UserDTO.createdAt(),
-                UserDTO.updatedAt()
+                userDTO.id(),
+                userDTO.name(),
+                userDTO.email(),
+                userDTO.phone(),
+                userDTO.photo(),
+                userDTO.birthday(),
+                userDTO.password(),
+                userDTO.createdAt(),
+                userDTO.updatedAt()
         );
     }
 }

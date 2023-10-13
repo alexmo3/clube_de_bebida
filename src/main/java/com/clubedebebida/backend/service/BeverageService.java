@@ -13,45 +13,45 @@ import org.springframework.data.domain.Pageable;
 @Service
 //User getUserById(Long id);
 public class BeverageService {
-    private final BeverageRepository BeverageRepository;
+    private final BeverageRepository beverageRepository;
 
     @Autowired
-    public BeverageService(BeverageRepository BeverageRepository){
-        this.BeverageRepository = BeverageRepository;
+    public BeverageService(BeverageRepository beverageRepository){
+        this.beverageRepository = beverageRepository;
     }
 
     public Page<BeverageDTO> findAll(Pageable pageable){
-        Page<Beverage> Beverages = BeverageRepository.findAll(pageable);
+        Page<Beverage> beverages = beverageRepository.findAll(pageable);
 
-        return Beverages.map(this::toDTO);
+        return beverages.map(this::toDTO);
     }
 
     public BeverageDTO findById(Long id){
-        Beverage Beverage = BeverageRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Bebida não encontrada"));
-        return toDTO(Beverage);
+        Beverage beverage = beverageRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Bebida não encontrada"));
+        return toDTO(beverage);
     }
 
-    public BeverageDTO save(BeverageDTO BeverageDTO){
-        Beverage Beverage = toEntity(BeverageDTO);
-        Beverage = BeverageRepository.save(Beverage);
+    public BeverageDTO save(BeverageDTO beverageDTO){
+        Beverage beverage = toEntity(beverageDTO);
+        beverage = beverageRepository.save(beverage);
 
-        return toDTO(Beverage);
+        return toDTO(beverage);
     }
 
-    public BeverageDTO update(Long id, BeverageDTO BeverageDTO){
+    public BeverageDTO update(Long id, BeverageDTO beverageDTO){
         try {
-            Beverage Beverage = BeverageRepository.getReferenceById(id);
-            Beverage.setName(BeverageDTO.name());
-            Beverage.setDescription(BeverageDTO.description());
-            Beverage.setType(BeverageDTO.type());
-            Beverage.setUnit(BeverageDTO.unit());
-            Beverage.setVolume(BeverageDTO.volume());
-            Beverage.setStock(BeverageDTO.stock());
-            Beverage.setMinStock(BeverageDTO.minStock());
-            Beverage.setCreatedAt(BeverageDTO.createdAt());
-            Beverage.setUpdatedAt(BeverageDTO.updatedAt());
-            Beverage = BeverageRepository.save(Beverage);
-            return toDTO(Beverage);
+            Beverage beverage = beverageRepository.getReferenceById(id);
+            beverage.setName(beverageDTO.name());
+            beverage.setDescription(beverageDTO.description());
+            beverage.setType(beverageDTO.type());
+            beverage.setUnit(beverageDTO.unit());
+            beverage.setVolume(beverageDTO.volume());
+            beverage.setStock(beverageDTO.stock());
+            beverage.setMinStock(beverageDTO.minStock());
+            beverage.setCreatedAt(beverageDTO.createdAt());
+            beverage.setUpdatedAt(beverageDTO.updatedAt());
+            beverage = beverageRepository.save(beverage);
+            return toDTO(beverage);
 
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Garrafa não encontrada");
@@ -59,36 +59,36 @@ public class BeverageService {
     }
 
     public void delete(Long id){
-        BeverageRepository.deleteById(id);
+        beverageRepository.deleteById(id);
     }
 
-    private BeverageDTO toDTO(Beverage Beverage) {
+    private BeverageDTO toDTO(Beverage beverage) {
         return new BeverageDTO(
-                Beverage.getId(),
-                Beverage.getName(),
-                Beverage.getDescription(),
-                Beverage.getType(),
-                Beverage.getUnit(),
-                Beverage.getVolume(),
-                Beverage.getStock(),
-                Beverage.getMinStock(),
-                Beverage.getCreatedAt(),
-                Beverage.getUpdatedAt()
+                beverage.getId(),
+                beverage.getName(),
+                beverage.getDescription(),
+                beverage.getType(),
+                beverage.getUnit(),
+                beverage.getVolume(),
+                beverage.getStock(),
+                beverage.getMinStock(),
+                beverage.getCreatedAt(),
+                beverage.getUpdatedAt()
         );
     }
 
-    private Beverage toEntity(BeverageDTO BeverageDTO){
+    private Beverage toEntity(BeverageDTO beverageDTO){
         return new Beverage(
-                BeverageDTO.id(),
-                BeverageDTO.name(),
-                BeverageDTO.description(),
-                BeverageDTO.type(),
-                BeverageDTO.unit(),
-                BeverageDTO.volume(),
-                BeverageDTO.stock(),
-                BeverageDTO.minStock(),
-                BeverageDTO.createdAt(),
-                BeverageDTO.updatedAt()
+                beverageDTO.id(),
+                beverageDTO.name(),
+                beverageDTO.description(),
+                beverageDTO.type(),
+                beverageDTO.unit(),
+                beverageDTO.volume(),
+                beverageDTO.stock(),
+                beverageDTO.minStock(),
+                beverageDTO.createdAt(),
+                beverageDTO.updatedAt()
         );
     }
 }
