@@ -19,6 +19,7 @@ public class SecurityConfig {
                     .requestMatchers("/garrafa/**").permitAll()
                     .requestMatchers("/usuario/**").permitAll()
                     .requestMatchers("/assinatura/**").permitAll()
+                    .anyRequest().authenticated()
                 .anyRequest().permitAll());
 
          return http.build();
