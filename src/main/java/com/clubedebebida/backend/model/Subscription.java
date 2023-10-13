@@ -1,11 +1,12 @@
 package com.clubedebebida.backend.model;
-
 import jakarta.persistence.*;
-import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,27 +16,28 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "subscription")
+public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    private String email;
+    private String description;
 
-    private String phone;
+    private Long userId;
 
-    private String photo;
+    private Long beverageId;
 
-    private LocalDate birthday;
+    private int size;
 
-    private String password;
+    private int balance;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
+    @CreationTimestamp
     private LocalDateTime updatedAt;
+
 }
