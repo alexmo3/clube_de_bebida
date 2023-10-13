@@ -17,7 +17,7 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository){
-        this.userRepository = UserRepository;
+        this.userRepository = userRepository;
     }
 
     public Page<UserDTO> findAll(Pageable pageable){
@@ -33,7 +33,7 @@ public class UserService {
 
     public UserDTO save(UserDTO UserDTO){
         User User = toEntity(UserDTO);
-        User = UserRepository.save(User);
+        User = userRepository.save(User);
 
         return toDTO(User);
     }
