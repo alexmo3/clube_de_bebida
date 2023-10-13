@@ -1,6 +1,8 @@
 package com.clubedebebida.backend.controller;
 
 import com.clubedebebida.backend.dto.SubscriptionDTO;
+import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.SubscriptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,11 @@ public class SubscriptionController {
     @GetMapping("/{id}/saldo")
     public int getBalance(@PathVariable Long id) {
         return subscriptionService.getBalanceById(id);
+    }
+
+    @PutMapping("/{id}/baixa/{total}")
+    public void setBalance(@PathVariable Long id, @PathVariable int total) {
+        subscriptionService.setBalance(id, total);
     }
 
 }

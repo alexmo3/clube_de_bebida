@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 @Service
-   //User getUserById(Long id);
 public class UserService {
     private final UserRepository userRepository;
 
@@ -31,11 +30,11 @@ public class UserService {
         return toDTO(user);
     }
 
-    public UserDTO save(UserDTO UserDTO){
-        User User = toEntity(UserDTO);
-        User = userRepository.save(User);
+    public UserDTO save(UserDTO userDTO){
+        User user = toEntity(userDTO);
+        user = userRepository.save(user);
 
-        return toDTO(User);
+        return toDTO(user);
     }
 
     public UserDTO update(Long id, UserDTO UserDTO){

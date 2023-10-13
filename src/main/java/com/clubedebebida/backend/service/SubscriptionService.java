@@ -12,13 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+
 @Service
 public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    public SubscriptionService(SubscriptionRepository SubscriptionRepository){
-        this.subscriptionRepository = SubscriptionRepository;
+    public SubscriptionService(SubscriptionRepository subscriptionRepository){
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     public Page<SubscriptionDTO> findAll(Pageable pageable){
@@ -42,21 +44,21 @@ public class SubscriptionService {
         return toDTO(Subscription);
     }
 
-    public SubscriptionDTO save(SubscriptionDTO SubscriptionDTO){
-        Subscription Subscription = toEntity(SubscriptionDTO);
-        Subscription = subscriptionRepository.save(Subscription);
+    public SubscriptionDTO save(SubscriptionDTO subscriptionDTO){
+        Subscription subscription = toEntity(subscriptionDTO);
+        subscription = subscriptionRepository.save(subscription);
 
-        return toDTO(Subscription);
+        return toDTO(subscription);
     }
 
     public SubscriptionDTO update(Long id, SubscriptionDTO SubscriptionDTO){
         try {
-            Subscription Subscription = subscriptionRepository.getReferenceById(id);
-            Subscription.setName(SubscriptionDTO.name());
-            Subscription.setCreatedAt(SubscriptionDTO.createdAt());
-            Subscription.setUpdatedAt(SubscriptionDTO.updatedAt());
-            Subscription = subscriptionRepository.save(Subscription);
-            return toDTO(Subscription);
+            Subscription subscription = subscriptionRepository.getReferenceById(id);
+            subscription.setName(SubscriptionDTO.name());
+            subscription.setCreatedAt(SubscriptionDTO.createdAt());
+            subscription.setUpdatedAt(SubscriptionDTO.updatedAt());
+            subscription = subscriptionRepository.save(subscription);
+            return toDTO(subscription);
 
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Assinatura não encontrada");
@@ -79,6 +81,21 @@ public class SubscriptionService {
                 subscription.getCreatedAt(),
                 subscription.getUpdatedAt()
         );
+    }
+
+    public void setBalance(Long id, int total){
+        try {
+            Subscription subscription = subscriptionRepository.getReferenceById(id);
+            int newBalance = subscription.getBalance();
+            newBalance = newBalance - total;
+
+            subscription.setBalance(newBalance);
+            subscription.setUpdatedAt(LocalDateTime.now());
+            subscriptionRepository.save(subscription);
+
+        } catch (EntityNotFoundException e) {
+            throw new ControllerNotFoundException("Assinatura não encontrada");
+        }
     }
 
     private Subscription toEntity(SubscriptionDTO subscriptionDTO){
