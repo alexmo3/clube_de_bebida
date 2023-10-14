@@ -40,4 +40,16 @@ public class ControllerExceptionHandler {
         }
         return ResponseEntity.status(status).body(validateError);
     }
+
+    @ExceptionHandler(ControllerInsufficientBalanceException.class)
+    public ResponseEntity<StandardError> entityNotFound(ControllerInsufficientBalanceException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.NOT_MODIFIED;
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError("Saldo insuficiente");
+        error.setMenssage(e.getMessage());
+        error.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(this.error);
+    }
+
 }

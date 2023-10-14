@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -46,8 +48,7 @@ public class UserService {
             user.setPhoto(UserDTO.photo());
             user.setBirthday(UserDTO.birthday());
             user.setPassword(UserDTO.password());
-            user.setCreatedAt(UserDTO.createdAt());
-            user.setUpdatedAt(UserDTO.updatedAt());
+            user.setUpdatedAt(LocalDateTime.now());
             user = userRepository.save(user);
             return toDTO(user);
 

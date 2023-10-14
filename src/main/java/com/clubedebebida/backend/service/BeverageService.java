@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
+
 @Service
 //User getUserById(Long id);
 public class BeverageService {
@@ -48,8 +50,7 @@ public class BeverageService {
             beverage.setVolume(beverageDTO.volume());
             beverage.setStock(beverageDTO.stock());
             beverage.setMinStock(beverageDTO.minStock());
-            beverage.setCreatedAt(beverageDTO.createdAt());
-            beverage.setUpdatedAt(beverageDTO.updatedAt());
+            beverage.setUpdatedAt(LocalDateTime.now());
             beverage = beverageRepository.save(beverage);
             return toDTO(beverage);
 

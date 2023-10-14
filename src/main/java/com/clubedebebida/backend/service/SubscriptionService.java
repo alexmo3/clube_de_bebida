@@ -1,9 +1,8 @@
 package com.clubedebebida.backend.service;
 
-import com.clubedebebida.backend.controller.SubscriptionController;
+import com.clubedebebida.backend.controller.exception.ControllerInsufficientBalanceException;
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
 import com.clubedebebida.backend.model.Subscription;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.SubscriptionDTO;
 import com.clubedebebida.backend.repository.SubscriptionRepository;
@@ -51,12 +50,13 @@ public class SubscriptionService {
         return toDTO(subscription);
     }
 
-    public SubscriptionDTO update(Long id, SubscriptionDTO SubscriptionDTO){
+    public SubscriptionDTO update(Long id, SubscriptionDTO subscriptionDTO){
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
-            subscription.setName(SubscriptionDTO.name());
-            subscription.setCreatedAt(SubscriptionDTO.createdAt());
-            subscription.setUpdatedAt(SubscriptionDTO.updatedAt());
+            subscription.setName(subscriptionDTO.name());
+            subscription.setSize(subscriptionDTO.size());
+            subscription.setDescription(subscriptionDTO.description());
+            subscription.setUpdatedAt(LocalDateTime.now());
             subscription = subscriptionRepository.save(subscription);
             return toDTO(subscription);
 
@@ -67,6 +67,23 @@ public class SubscriptionService {
 
     public void delete(Long id){
         subscriptionRepository.deleteById(id);
+    }
+
+    public SubscriptionDTO setBalance(Long id, int total){
+        try {
+            Subscription subscription = subscriptionRepository.getReferenceById(id);
+            if (total <= subscription.getBalance()) {
+                int newBalance = total - subscription.getBalance();
+                subscription.setBalance(newBalance);
+                subscription.setUpdatedAt(LocalDateTime.now());
+                subscription = subscriptionRepository.save(subscription);
+                return toDTO(subscription);
+            }else{
+                throw new ControllerInsufficientBalanceException("Saldo insuficiente");
+            }
+        } catch (EntityNotFoundException e) {
+            throw new ControllerNotFoundException("Assinatura não encontrada");
+        }
     }
 
     private SubscriptionDTO toDTO(Subscription subscription) {
@@ -83,20 +100,6 @@ public class SubscriptionService {
         );
     }
 
-    public void setBalance(Long id, int total){
-        try {
-            Subscription subscription = subscriptionRepository.getReferenceById(id);
-            int newBalance = subscription.getBalance();
-            newBalance = newBalance - total;
-
-            subscription.setBalance(newBalance);
-            subscription.setUpdatedAt(LocalDateTime.now());
-            subscriptionRepository.save(subscription);
-
-        } catch (EntityNotFoundException e) {
-            throw new ControllerNotFoundException("Assinatura não encontrada");
-        }
-    }
 
     private Subscription toEntity(SubscriptionDTO subscriptionDTO){
         return new Subscription(
