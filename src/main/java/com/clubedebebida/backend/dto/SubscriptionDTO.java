@@ -21,6 +21,8 @@ public record SubscriptionDTO(
 
     int balance,
 
+    int status,
+
     LocalDateTime createdAt,
 
     LocalDateTime updatedAt

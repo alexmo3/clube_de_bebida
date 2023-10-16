@@ -69,11 +69,11 @@ public class SubscriptionService {
         subscriptionRepository.deleteById(id);
     }
 
-    public SubscriptionDTO setBalance(Long id, int total){
+    public SubscriptionDTO setBalance(Long id, int consumo){
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
-            if (total <= subscription.getBalance()) {
-                int newBalance = total - subscription.getBalance();
+            if (consumo <= subscription.getBalance()) {
+                int newBalance = consumo - subscription.getBalance();
                 subscription.setBalance(newBalance);
                 subscription.setUpdatedAt(LocalDateTime.now());
                 subscription = subscriptionRepository.save(subscription);
@@ -81,6 +81,18 @@ public class SubscriptionService {
             }else{
                 throw new ControllerInsufficientBalanceException("Saldo insuficiente");
             }
+        } catch (EntityNotFoundException e) {
+            throw new ControllerNotFoundException("Assinatura não encontrada");
+        }
+    }
+
+    public SubscriptionDTO setStatus(Long id, int status){
+        try {
+            Subscription subscription = subscriptionRepository.getReferenceById(id);
+            subscription.setStatus(status);
+            subscription.setUpdatedAt(LocalDateTime.now());
+            subscription = subscriptionRepository.save(subscription);
+            return toDTO(subscription);
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Assinatura não encontrada");
         }
@@ -95,6 +107,7 @@ public class SubscriptionService {
                 subscription.getBeverageId(),
                 subscription.getSize(),
                 subscription.getBalance(),
+                subscription.getStatus(),
                 subscription.getCreatedAt(),
                 subscription.getUpdatedAt()
         );
@@ -110,6 +123,7 @@ public class SubscriptionService {
                 subscriptionDTO.beverageId(),
                 subscriptionDTO.size(),
                 subscriptionDTO.balance(),
+                subscriptionDTO.status(),
                 subscriptionDTO.createdAt(),
                 subscriptionDTO.updatedAt()
         );

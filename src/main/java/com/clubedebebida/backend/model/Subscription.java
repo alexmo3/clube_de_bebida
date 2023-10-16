@@ -34,6 +34,8 @@ public class Subscription {
 
     private int balance;
 
+    private int status;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
