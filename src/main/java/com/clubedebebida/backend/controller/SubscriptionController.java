@@ -66,8 +66,15 @@ public class SubscriptionController {
         return subscriptionService.getBalanceById(id);
     }
 
-    @PutMapping("/{id}/baixa")
-    public ResponseEntity<SubscriptionDTO> setBalance(@PathVariable Long id, @RequestParam int consumo){
+    @PutMapping("/{id}/baixar")
+    public ResponseEntity<SubscriptionDTO> setBalanceDown(@PathVariable Long id, @RequestParam int consumo){
+        SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, consumo);
+
+        return ResponseEntity.ok(updatedSubscription);
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<SubscriptionDTO> setBalanceUp(@PathVariable Long id, @RequestParam int consumo){
         SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, consumo);
 
         return ResponseEntity.ok(updatedSubscription);
