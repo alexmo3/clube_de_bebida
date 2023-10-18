@@ -1,8 +1,6 @@
 package com.clubedebebida.backend.controller;
 
 import com.clubedebebida.backend.dto.SubscriptionDTO;
-import com.clubedebebida.backend.model.Subscription;
-import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.SubscriptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +53,7 @@ public class SubscriptionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         subscriptionService.delete(id);
 
         return ResponseEntity.noContent().build();
