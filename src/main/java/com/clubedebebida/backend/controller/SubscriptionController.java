@@ -17,43 +17,42 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     @Autowired
-    public SubscriptionController(SubscriptionService subscriptionService){
+    public SubscriptionController(SubscriptionService subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
 
     @GetMapping
     public ResponseEntity<Page<SubscriptionDTO>> findAll(
-            @PageableDefault (size=10, page=0, sort="name")Pageable pageable
-    )
-    {
+            @PageableDefault(size = 10, page = 0, sort = "name") Pageable pageable
+    ) {
         Page<SubscriptionDTO> subscriptionsDTO = subscriptionService.findAll(pageable);
 
         return ResponseEntity.ok(subscriptionsDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> findById(@PathVariable Long id){
+    public ResponseEntity<SubscriptionDTO> findById(@PathVariable Long id) {
         SubscriptionDTO subscriptionsDTO = subscriptionService.findById(id);
 
         return ResponseEntity.ok(subscriptionsDTO);
     }
 
     @PostMapping
-    public ResponseEntity<SubscriptionDTO> save(@Valid @RequestBody SubscriptionDTO subscriptionDTO){
+    public ResponseEntity<SubscriptionDTO> save(@Valid @RequestBody SubscriptionDTO subscriptionDTO) {
         SubscriptionDTO savedSubscription = subscriptionService.save(subscriptionDTO);
 
         return new ResponseEntity<>(savedSubscription, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> update(@PathVariable Long id, @RequestBody SubscriptionDTO subscriptionDTO){
+    public ResponseEntity<SubscriptionDTO> update(@PathVariable Long id, @RequestBody SubscriptionDTO subscriptionDTO) {
         SubscriptionDTO updatedSubscription = subscriptionService.update(id, subscriptionDTO);
 
         return ResponseEntity.ok(updatedSubscription);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         subscriptionService.delete(id);
 
         return ResponseEntity.noContent().build();
@@ -65,21 +64,21 @@ public class SubscriptionController {
     }
 
     @PutMapping("/{id}/baixar")
-    public ResponseEntity<SubscriptionDTO> setBalanceDown(@PathVariable Long id, @RequestParam int consumo){
+    public ResponseEntity<SubscriptionDTO> setBalanceDown(@PathVariable Long id, @RequestParam int consumo) {
         SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, consumo);
 
         return ResponseEntity.ok(updatedSubscription);
     }
 
     @PutMapping("/{id}/cancelar")
-    public ResponseEntity<SubscriptionDTO> setBalanceUp(@PathVariable Long id, @RequestParam int consumo){
+    public ResponseEntity<SubscriptionDTO> setBalanceUp(@PathVariable Long id, @RequestParam int consumo) {
         SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, consumo);
 
         return ResponseEntity.ok(updatedSubscription);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<SubscriptionDTO> setStatus(@PathVariable Long id, @RequestParam int status){
+    public ResponseEntity<SubscriptionDTO> setStatus(@PathVariable Long id, @RequestParam int status) {
         SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, status);
 
         return ResponseEntity.ok(updatedSubscription);
