@@ -2,6 +2,7 @@ package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
 import com.clubedebebida.backend.dto.UserLoginRequestDTO;
+import com.clubedebebida.backend.dto.UserPasswordDTO;
 import com.clubedebebida.backend.model.User;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.UserDTO;
@@ -53,14 +54,13 @@ public class UserService {
         }
     }
 
-    public UserDTO changePassword(String email, String password, String newPassword) {
+    public UserPasswordDTO changePassword(Long id, UserPasswordDTO userPasswordDTO) {
         try {
-            User user = userRepository.findByEmail(email);
-            if (user != null && user.getPassword().equals(password)) {
-                //User userChange = new User(email, password);
-                user.setPassword(password);
+            User user = userRepository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Usuário não encontrado"));
+            if (user != null && user.getPassword().equals(userPasswordDTO.password())) {
+                user.setPassword(userPasswordDTO.newPassword());
                 user = userRepository.save(user);
-                return toDTO(user);
+                return new UserPasswordDTO(user.getId(), user.getEmail(), user.getPassword(),"");
             } else {
                 return null; // Credenciais inválidas
             }

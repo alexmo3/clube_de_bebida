@@ -25,10 +25,12 @@ public class Subscription {
 
     private String description;
 
-    @ManyToOne
+    @OneToOne
+    //@JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @OneToOne
+    //@JoinColumn(name = "drink_id")
     private Drink drink;
 
     private int size;

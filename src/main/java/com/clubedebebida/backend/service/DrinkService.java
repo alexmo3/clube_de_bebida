@@ -55,7 +55,7 @@ public class DrinkService {
             return toDTO(drink);
 
         } catch (EntityNotFoundException e) {
-            throw new ControllerNotFoundException("Garrafa não encontrada");
+            throw new ControllerNotFoundException("Bebida não encontrada");
         }
     }
 

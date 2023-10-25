@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/garrafa")
+@RequestMapping("/drink")
 public class DrinkController {
     private final DrinkService drinkService;
 

@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,8 +41,6 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    public User(){}
 
     public User(Long id, String email, String password) {
         this.id = id;

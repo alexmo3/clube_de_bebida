@@ -2,6 +2,7 @@ package com.clubedebebida.backend.controller;
 
 import com.clubedebebida.backend.dto.UserDTO;
 import com.clubedebebida.backend.dto.UserLoginRequestDTO;
+import com.clubedebebida.backend.dto.UserPasswordDTO;
 import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -72,4 +73,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @PutMapping("/novasenha/{id}")
+    public ResponseEntity<UserPasswordDTO> changePassword(@PathVariable("id") Long id, @RequestBody UserPasswordDTO userPasswordDTO){
+        UserPasswordDTO updatedUsuario = userService.changePassword(id, userPasswordDTO);
+
+        return ResponseEntity.ok(updatedUsuario);
+    }
+
+
 }
