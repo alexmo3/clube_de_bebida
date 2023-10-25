@@ -36,7 +36,4 @@ public record UserDTO(
         LocalDateTime updatedAt
 
 ) {
-    /*public UserDTO(Long id, String name, String email, String password) {
-        this(null, name, email, password);
-    }*/
 }
