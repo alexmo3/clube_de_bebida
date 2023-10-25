@@ -45,7 +45,7 @@ public class SaleService {
             Sale sale = saleRepository.getReferenceById(id);
             sale.setPrice(saleDTO.price());
             sale.setWaiter(saleDTO.waiter());
-            sale.setSubscriptionId(saleDTO.subscriptionId());
+            sale.setSubscription(saleDTO.subscription());
             sale.setUpdatedAt(LocalDateTime.now());
             sale = saleRepository.save(sale);
             return toDTO(sale);
@@ -62,7 +62,7 @@ public class SaleService {
     private SaleDTO toDTO(Sale sale) {
         return new SaleDTO(
                 sale.getId(),
-                sale.getSubscriptionId(),
+                sale.getSubscription(),
                 sale.getPrice(),
                 sale.getWaiter(),
                 sale.getCreatedAt(),
@@ -73,7 +73,7 @@ public class SaleService {
     private Sale toEntity(SaleDTO saleDTO){
         return new Sale(
                 saleDTO.id(),
-                saleDTO.subscriptionId(),
+                saleDTO.subscription(),
                 saleDTO.price(),
                 saleDTO.waiter(),
                 saleDTO.createdAt(),

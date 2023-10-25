@@ -1,7 +1,6 @@
 package com.clubedebebida.backend.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -26,9 +25,11 @@ public class Subscription {
 
     private String description;
 
-    private Long userId;
+    @ManyToOne
+    private User user;
 
-    private Long beverageId;
+    @ManyToOne
+    private Drink drink;
 
     private int size;
 

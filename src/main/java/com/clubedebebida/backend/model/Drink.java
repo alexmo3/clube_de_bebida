@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "beverage")
-public class Beverage {
+@Table(name = "drink")
+public class Drink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,11 +25,12 @@ public class Consumption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long subscriptionId;
+    @ManyToOne
+    private Subscription subscription;
 
     private int total;
 
-    private float price;
+    private BigDecimal price;
 
     private int waiter;
 

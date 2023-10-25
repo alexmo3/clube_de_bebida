@@ -1,19 +1,29 @@
 package com.clubedebebida.backend.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record SaleDTO (
         Long id,
 
-        @NotBlank(message = "A assinatura deve ser informada")
-        Long subscriptionId,
+        @ManyToOne
+        @JoinColumn(name = "id")
+        @Min(value = 1, message = "Assinatura deve ser informada")
+        Subscription subscription,
 
-        @NotBlank(message = "O preço deve ser informado")
-        float price,
+        @DecimalMin(value = "0.0", inclusive = false, message = "Preço dever informado")
+        BigDecimal price,
 
-        @NotBlank(message = "O garçom deve ser informado")
-        int waiter,
+        @ManyToOne
+        @JoinColumn(name = "id")
+        @Min(value = 1, message = "Garçom deve ser informado")
+        User waiter,
 
         LocalDateTime createdAt,
 

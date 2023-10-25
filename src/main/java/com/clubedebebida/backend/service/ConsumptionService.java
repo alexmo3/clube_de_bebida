@@ -46,7 +46,7 @@ public class ConsumptionService {
             consumption.setPrice(consumptionDTO.price());
             consumption.setTotal(consumptionDTO.total());
             consumption.setWaiter(consumptionDTO.waiter());
-            consumption.setSubscriptionId(consumptionDTO.subscriptionId());
+            consumption.setSubscription(consumptionDTO.subscription());
             consumption.setUpdatedAt(LocalDateTime.now());
             consumption = consumptionRepository.save(consumption);
             return toDTO(consumption);
@@ -63,7 +63,7 @@ public class ConsumptionService {
     private ConsumptionDTO toDTO(Consumption consumption) {
         return new ConsumptionDTO(
                 consumption.getId(),
-                consumption.getSubscriptionId(),
+                consumption.getSubscription(),
                 consumption.getTotal(),
                 consumption.getPrice(),
                 consumption.getWaiter(),
@@ -75,7 +75,7 @@ public class ConsumptionService {
     private Consumption toEntity(ConsumptionDTO consumptionDTO){
         return new Consumption(
                 consumptionDTO.id(),
-                consumptionDTO.subscriptionId(),
+                consumptionDTO.subscription(),
                 consumptionDTO.total(),
                 consumptionDTO.price(),
                 consumptionDTO.waiter(),

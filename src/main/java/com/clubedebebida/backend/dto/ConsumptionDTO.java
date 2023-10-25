@@ -1,20 +1,28 @@
 package com.clubedebebida.backend.dto;
 
+import com.clubedebebida.backend.model.Subscription;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ConsumptionDTO (
     Long id,
 
-    @NotBlank(message = "A assinatura deve ser informada")
-    Long subscriptionId,
+    @ManyToOne
+    @Min(value = 1L, message = "A assinatura deve ser informada")
+    Subscription subscription,
 
-    @NotBlank(message = "O total consumido deve ser informado")
+    @Min(value = 1, message = "O total consumido deve ser informado")
     int total,
 
-    @NotBlank(message = "O preço deve ser informado")
-    float price,
-    @NotBlank(message = "O garçom deve ser informado")
+    @DecimalMin(value = "0.00", inclusive = false, message = "O preço deve ser informado")
+    BigDecimal price,
+
+    @Min(value = 1, message = "O garçom deve ser informado")
     int waiter,
 
     LocalDateTime createdAt,

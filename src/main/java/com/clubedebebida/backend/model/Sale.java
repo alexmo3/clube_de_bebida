@@ -1,12 +1,15 @@
 package com.clubedebebida.backend.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -23,11 +26,13 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long subscriptionId;
+    @ManyToOne
+    private Subscription subscription;
 
-    private float price;
+    private BigDecimal price;
 
-    private int waiter;
+    @ManyToOne
+    private User waiter;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

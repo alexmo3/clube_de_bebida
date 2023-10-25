@@ -1,9 +1,11 @@
 package com.clubedebebida.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
-public record BeverageDTO(
+public record DrinkDTO(
     Long id,
 
     @NotBlank(message = "O nome deve ser informado")
@@ -11,12 +13,13 @@ public record BeverageDTO(
 
     String description,
 
-    @NotBlank(message = "O tipo deve ser informado")
+    @NotNull(message = "O tipo deve ser informado")
     int type,
+
     @NotBlank(message = "A unidade de medição deve ser informada")
     String unit,
 
-    @NotBlank(message = "O volume deve ser informado")
+    @NotNull(message = "O volume deve ser informado")
     int volume,
 
     int stock,

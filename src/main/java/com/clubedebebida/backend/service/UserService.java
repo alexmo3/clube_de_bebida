@@ -1,6 +1,7 @@
 package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
+import com.clubedebebida.backend.dto.UserLoginRequestDTO;
 import com.clubedebebida.backend.model.User;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.UserDTO;
@@ -39,6 +40,23 @@ public class UserService {
         return toDTO(user);
     }
 
+    public UserLoginRequestDTO login(Long id, String email, String password) {
+        // Verifique as credenciais do usuário no banco de dados.
+        // Se as credenciais forem válidas, retorne as informações do usuário.
+        // Caso contrário, retorne null ou uma exceção, dependendo da abordagem.
+
+        // Exemplo simplificado:
+        User user = userRepository.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
+        } else {
+            return null; // Credenciais inválidas
+        }
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
     public UserDTO update(Long id, UserDTO UserDTO){
         try {
             User user = userRepository.getReferenceById(id);
@@ -64,6 +82,7 @@ public class UserService {
     private UserDTO toDTO(User user) {
         return new UserDTO(
                 user.getId(),
+                user.getType(),
                 user.getName(),
                 user.getEmail(),
                 user.getPhone(),
@@ -78,6 +97,7 @@ public class UserService {
     private User toEntity(UserDTO userDTO){
         return new User(
                 userDTO.id(),
+                userDTO.type(),
                 userDTO.name(),
                 userDTO.email(),
                 userDTO.phone(),

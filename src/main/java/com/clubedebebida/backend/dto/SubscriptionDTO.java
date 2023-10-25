@@ -1,5 +1,9 @@
 package com.clubedebebida.backend.dto;
 
+import com.clubedebebida.backend.model.Drink;
+import com.clubedebebida.backend.model.User;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 public record SubscriptionDTO(
@@ -10,13 +14,15 @@ public record SubscriptionDTO(
 
     String description,
 
-    @NotBlank(message = "O cliente deve ser informado")
-    Long userId,
+    @ManyToOne
+    @Min(value = 1L, message = "O cliente deve ser informado")
+    User user,
 
-    @NotBlank(message = "A garrafa deve ser informada")
-    Long beverageId,
+    @ManyToOne
+    @Min(value = 1L, message = "A garrafa deve ser informada")
+    Drink drink,
 
-    @NotBlank(message = "A quantidade deve ser informada")
+    @Min(value = 1L, message = "A quantidade deve ser informada")
     int size,
 
     int balance,

@@ -21,6 +21,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int type;
+
     private String name;
 
     private String email;
@@ -38,4 +40,10 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public User(Long id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+    }
 }
