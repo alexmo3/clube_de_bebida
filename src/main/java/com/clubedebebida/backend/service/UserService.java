@@ -18,22 +18,22 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public Page<UserDTO> findAll(Pageable pageable){
+    public Page<UserDTO> findAll(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
 
         return users.map(this::toDTO);
     }
 
-    public UserDTO findById(Long id){
-        User user = userRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Usuário não encontrado"));
+    public UserDTO findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Usuário não encontrado"));
         return toDTO(user);
     }
 
-    public UserDTO save(UserDTO userDTO){
+    public UserDTO save(UserDTO userDTO) {
         User user = toEntity(userDTO);
         user = userRepository.save(user);
 
@@ -41,24 +41,35 @@ public class UserService {
     }
 
     public UserLoginRequestDTO login(String email, String password) {
-        User user = userRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
-        } else {
-            return null; // Credenciais inválidas
+        try {
+            User user = userRepository.findByEmail(email);
+            if (user != null && user.getPassword().equals(password)) {
+                return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
+            } else {
+                return null; // Credenciais inválidas
+            }
+        } catch (EntityNotFoundException e) {
+            throw new ControllerNotFoundException("Usuário não encontrado");
         }
     }
 
-    public UserLoginRequestDTO changePassword(String email, String password, String newPassword) {
-        User user = userRepository.findByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
-        } else {
-            return null; // Credenciais inválidas
+    public UserDTO changePassword(String email, String password, String newPassword) {
+        try {
+            User user = userRepository.findByEmail(email);
+            if (user != null && user.getPassword().equals(password)) {
+                //User userChange = new User(email, password);
+                user.setPassword(password);
+                user = userRepository.save(user);
+                return toDTO(user);
+            } else {
+                return null; // Credenciais inválidas
+            }
+        } catch (EntityNotFoundException e) {
+            throw new ControllerNotFoundException("Usuário não encontrado");
         }
     }
 
-    public UserDTO update(Long id, UserDTO UserDTO){
+    public UserDTO update(Long id, UserDTO UserDTO) {
         try {
             User user = userRepository.getReferenceById(id);
             user.setName(UserDTO.name());
@@ -76,7 +87,7 @@ public class UserService {
         }
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         userRepository.deleteById(id);
     }
 
@@ -95,7 +106,7 @@ public class UserService {
         );
     }
 
-    private User toEntity(UserDTO userDTO){
+    private User toEntity(UserDTO userDTO) {
         return new User(
                 userDTO.id(),
                 userDTO.type(),
