@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -64,31 +63,13 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginRequestDTO> login(@Valid @RequestBody UserLoginRequestDTO loginRequest) {
-        // Implemente a lógica de autenticação aqui, verificando se o usuário e a senha correspondem.
-        // Você pode usar um serviço de autenticação, como Spring Security, para isso.
-
-        // Se as credenciais forem válidas, gere um token de autenticação JWT e retorne as informações do usuário.
-        // Caso contrário, retorne um erro de autenticação.
         User user = new User(loginRequest.id(), loginRequest.email(),loginRequest.password());
 
-        UserLoginRequestDTO userLoginRequestDTO = userService.login(user.getId(), user.getEmail(), user.getPassword());
+        UserLoginRequestDTO userLoginRequestDTO = userService.login(user.getEmail(), user.getPassword());
         if (userLoginRequestDTO != null) {
             return ResponseEntity.ok(loginRequest);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-/*
-    @GetMapping("/user/{email}")
-    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
-        User user = userService.findByEmail(email);
-        if (user != null) {
-            UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPassword());
-            return ResponseEntity.ok(userDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
- */
 }

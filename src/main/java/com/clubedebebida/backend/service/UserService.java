@@ -40,12 +40,7 @@ public class UserService {
         return toDTO(user);
     }
 
-    public UserLoginRequestDTO login(Long id, String email, String password) {
-        // Verifique as credenciais do usuário no banco de dados.
-        // Se as credenciais forem válidas, retorne as informações do usuário.
-        // Caso contrário, retorne null ou uma exceção, dependendo da abordagem.
-
-        // Exemplo simplificado:
+    public UserLoginRequestDTO login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user != null && user.getPassword().equals(password)) {
             return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
@@ -54,9 +49,15 @@ public class UserService {
         }
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserLoginRequestDTO changePassword(String email, String password, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        if (user != null && user.getPassword().equals(password)) {
+            return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
+        } else {
+            return null; // Credenciais inválidas
+        }
     }
+
     public UserDTO update(Long id, UserDTO UserDTO){
         try {
             User user = userRepository.getReferenceById(id);

@@ -27,6 +27,8 @@ public record UserDTO(
         LocalDate birthday,
 
         @NotBlank(message = "A senha deve ser informada")
+        @Min(value = 6, message = "A senha deve ter no mínimo 6 caracteres")
+        @Min(value = 20, message = "A senha deve ter no máximo 20 caracteres")
         String password,
 
         LocalDateTime createdAt,
