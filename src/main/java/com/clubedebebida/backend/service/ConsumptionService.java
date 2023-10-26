@@ -1,7 +1,11 @@
 package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
+import com.clubedebebida.backend.controller.request.ConsumptionRequest;
 import com.clubedebebida.backend.model.Consumption;
+import com.clubedebebida.backend.model.Sale;
+import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.repository.ConsumptionRepository;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.ConsumptionDTO;
@@ -84,7 +88,27 @@ public class ConsumptionService {
         );
     }
 
+    private ConsumptionDTO requestToDTO(ConsumptionRequest consumptionRequest) {
+        Consumption consumption = new Consumption();
 
+        Subscription subscription = new Subscription();
+        subscription.setId(consumptionRequest.subscriptionId());
+        consumption.setSubscription(subscription);
+
+        User waiter = new User();
+        waiter.setId(consumptionRequest.waiterId());
+
+        consumption.setWaiter(waiter);
+        return new ConsumptionDTO(
+                null,
+                subscription,
+                consumptionRequest.total(),
+                consumptionRequest.price(),
+                waiter,
+                null,
+                null
+        );
+    }
 
 
 }

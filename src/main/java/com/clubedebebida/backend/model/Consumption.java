@@ -32,7 +32,8 @@ public class Consumption {
 
     private BigDecimal price;
 
-    private int waiter;
+    @ManyToOne
+    private User waiter;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

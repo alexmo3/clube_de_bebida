@@ -2,11 +2,8 @@ package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerInsufficientBalanceException;
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
-import com.clubedebebida.backend.controller.request.SaleRequest;
 import com.clubedebebida.backend.controller.request.SubscriptionRequest;
-import com.clubedebebida.backend.dto.SaleDTO;
 import com.clubedebebida.backend.model.Drink;
-import com.clubedebebida.backend.model.Sale;
 import com.clubedebebida.backend.model.Subscription;
 import com.clubedebebida.backend.model.User;
 import org.springframework.stereotype.Service;
