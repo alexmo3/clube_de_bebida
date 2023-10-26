@@ -1,6 +1,9 @@
 package com.clubedebebida.backend.controller;
 
+import com.clubedebebida.backend.controller.request.SubscriptionRequest;
 import com.clubedebebida.backend.dto.SubscriptionDTO;
+import com.clubedebebida.backend.model.Drink;
+import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.SubscriptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +41,28 @@ public class SubscriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<SubscriptionDTO> save(@Valid @RequestBody SubscriptionDTO subscriptionDTO) {
-        SubscriptionDTO savedSubscription = subscriptionService.save(subscriptionDTO);
+    public ResponseEntity<SubscriptionDTO> save(@Valid @RequestBody SubscriptionRequest subscriptionRequest) {
+
+        var user = new User();
+        user.setId(subscriptionRequest.userId());
+
+        var drink = new Drink();
+        drink.setId(subscriptionRequest.drinkId());
+
+        SubscriptionDTO savedSubscription = subscriptionService.save(
+                new SubscriptionDTO(
+                        null,
+                        subscriptionRequest.name(),
+                        subscriptionRequest.description(),
+                        user,
+                        drink,
+                        subscriptionRequest.size(),
+                        subscriptionRequest.balance(),
+                        subscriptionRequest.status(),
+                        null,
+                        null
+                )
+        );
 
         return new ResponseEntity<>(savedSubscription, HttpStatus.CREATED);
     }
