@@ -22,8 +22,8 @@ public record UserDTO(
 
         String photo,
 
-        @Past
-        @NotBlank(message = "A data de nascimento deve ser informada")
+        //@Past
+        //@NotBlank(message = "A data de nascimento deve ser informada")
         LocalDate birthday,
 
         @NotBlank(message = "A senha deve ser informada")
