@@ -1,8 +1,8 @@
 package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
-import com.clubedebebida.backend.dto.UserLoginRequestDTO;
-import com.clubedebebida.backend.dto.UserPasswordDTO;
+import com.clubedebebida.backend.controller.request.UserLoginRequest;
+import com.clubedebebida.backend.controller.request.UserPasswordRequest;
 import com.clubedebebida.backend.model.User;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.UserDTO;
@@ -41,11 +41,11 @@ public class UserService {
         return toDTO(user);
     }
 
-    public UserLoginRequestDTO login(String email, String password) {
+    public UserLoginRequest login(String email, String password) {
         try {
             User user = userRepository.findByEmail(email);
             if (user != null && user.getPassword().equals(password)) {
-                return new UserLoginRequestDTO(user.getId(), user.getName(), user.getEmail());
+                return new UserLoginRequest(user.getId(), user.getName(), user.getEmail());
             } else {
                 return null; // Credenciais inválidas
             }
@@ -54,13 +54,13 @@ public class UserService {
         }
     }
 
-    public UserPasswordDTO changePassword(Long id, UserPasswordDTO userPasswordDTO) {
+    public UserPasswordRequest changePassword(Long id, UserPasswordRequest userPasswordRequest) {
         try {
             User user = userRepository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Usuário não encontrado"));
-            if (user != null && user.getPassword().equals(userPasswordDTO.password())) {
-                user.setPassword(userPasswordDTO.newPassword());
+            if (user != null && user.getPassword().equals(userPasswordRequest.password())) {
+                user.setPassword(userPasswordRequest.newPassword());
                 user = userRepository.save(user);
-                return new UserPasswordDTO(user.getId(), user.getEmail(), user.getPassword(),"");
+                return new UserPasswordRequest(user.getId(), user.getEmail(), user.getPassword(),"");
             } else {
                 return null; // Credenciais inválidas
             }

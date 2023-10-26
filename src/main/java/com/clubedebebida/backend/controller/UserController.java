@@ -1,8 +1,8 @@
 package com.clubedebebida.backend.controller;
 
 import com.clubedebebida.backend.dto.UserDTO;
-import com.clubedebebida.backend.dto.UserLoginRequestDTO;
-import com.clubedebebida.backend.dto.UserPasswordDTO;
+import com.clubedebebida.backend.controller.request.UserLoginRequest;
+import com.clubedebebida.backend.controller.request.UserPasswordRequest;
 import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -63,11 +63,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginRequestDTO> login(@Valid @RequestBody UserLoginRequestDTO loginRequest) {
+    public ResponseEntity<UserLoginRequest> login(@Valid @RequestBody UserLoginRequest loginRequest) {
         User user = new User(loginRequest.id(), loginRequest.email(),loginRequest.password());
 
-        UserLoginRequestDTO userLoginRequestDTO = userService.login(user.getEmail(), user.getPassword());
-        if (userLoginRequestDTO != null) {
+        UserLoginRequest userLoginRequest = userService.login(user.getEmail(), user.getPassword());
+        if (userLoginRequest != null) {
             return ResponseEntity.ok(loginRequest);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -75,8 +75,8 @@ public class UserController {
     }
 
     @PutMapping("/novasenha/{id}")
-    public ResponseEntity<UserPasswordDTO> changePassword(@PathVariable("id") Long id, @RequestBody UserPasswordDTO userPasswordDTO){
-        UserPasswordDTO updatedUsuario = userService.changePassword(id, userPasswordDTO);
+    public ResponseEntity<UserPasswordRequest> changePassword(@PathVariable("id") Long id, @RequestBody UserPasswordRequest userPasswordRequest){
+        UserPasswordRequest updatedUsuario = userService.changePassword(id, userPasswordRequest);
 
         return ResponseEntity.ok(updatedUsuario);
     }

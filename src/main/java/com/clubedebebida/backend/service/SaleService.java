@@ -1,7 +1,10 @@
 package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
+import com.clubedebebida.backend.controller.request.SaleRequest;
 import com.clubedebebida.backend.model.Sale;
+import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.SaleDTO;
@@ -80,4 +83,26 @@ public class SaleService {
                 saleDTO.updatedAt()
         );
     }
+
+    public SaleDTO requestToDTO(@org.jetbrains.annotations.NotNull SaleRequest saleRequest) {
+        Sale sale = new Sale();
+
+        Subscription subscription = new Subscription();
+        subscription.setId(saleRequest.subscriptionId());
+        sale.setSubscription(subscription);
+
+        User waiter = new User();
+        waiter.setId(saleRequest.waiterId());
+        sale.setWaiter(waiter);
+
+        return new SaleDTO(
+                null,
+                subscription,
+                saleRequest.price(),
+                waiter,
+                null,
+                null
+        );
+    }
+
 }

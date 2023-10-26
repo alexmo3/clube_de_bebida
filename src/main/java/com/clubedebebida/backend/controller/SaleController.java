@@ -1,6 +1,10 @@
 package com.clubedebebida.backend.controller;
 
+import com.clubedebebida.backend.controller.request.SaleRequest;
 import com.clubedebebida.backend.dto.SaleDTO;
+import com.clubedebebida.backend.model.Sale;
+import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.SaleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +42,10 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<SaleDTO> save(@Valid @RequestBody SaleDTO saleDTO) {
-        SaleDTO savedConsumption = saleService.save(saleDTO);
+    public ResponseEntity<SaleDTO> save(@Valid @RequestBody SaleRequest saleRequest) {
+        SaleDTO savedSale = saleService.save(saleService.requestToDTO(saleRequest));
 
-        return new ResponseEntity<>(savedConsumption, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedSale, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

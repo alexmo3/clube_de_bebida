@@ -1,9 +1,9 @@
-package com.clubedebebida.backend.dto;
+package com.clubedebebida.backend.controller.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record UserPasswordDTO(
+public record UserLoginRequest(
         Long id,
 
         @NotBlank(message = "E-mail deve ser informado")
@@ -11,10 +11,7 @@ public record UserPasswordDTO(
         String email,
 
         @NotBlank(message = "Senha deve ser informada")
-        String password,
-
-        @NotBlank(message = "Nova senha deve ser informada")
-        String newPassword
+        String password
 ) {
 
 }

@@ -13,16 +13,16 @@ public record SaleDTO (
         Long id,
 
         @ManyToOne
-        @JoinColumn(name = "id")
-        @Min(value = 1, message = "Assinatura deve ser informada")
+        @JoinColumn(name = "subscription_id")
+        //@Min(value = 1, message = "Assinatura deve ser informada")
         Subscription subscription,
 
-        @DecimalMin(value = "0.0", inclusive = false, message = "Preço dever informado")
+        @DecimalMin(value = "0.0", inclusive = false, message = "Preço deve informado")
         BigDecimal price,
 
         @ManyToOne
-        @JoinColumn(name = "id")
-        @Min(value = 1, message = "Garçom deve ser informado")
+        @JoinColumn(name = "waiter_id")
+        //@Min(value = 1, message = "Garçom deve ser informado")
         User waiter,
 
         LocalDateTime createdAt,

@@ -2,7 +2,13 @@ package com.clubedebebida.backend.service;
 
 import com.clubedebebida.backend.controller.exception.ControllerInsufficientBalanceException;
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
+import com.clubedebebida.backend.controller.request.SaleRequest;
+import com.clubedebebida.backend.controller.request.SubscriptionRequest;
+import com.clubedebebida.backend.dto.SaleDTO;
+import com.clubedebebida.backend.model.Drink;
+import com.clubedebebida.backend.model.Sale;
 import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
 import org.springframework.stereotype.Service;
 import com.clubedebebida.backend.dto.SubscriptionDTO;
 import com.clubedebebida.backend.repository.SubscriptionRepository;
@@ -18,11 +24,11 @@ public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    public SubscriptionService(SubscriptionRepository subscriptionRepository){
+    public SubscriptionService(SubscriptionRepository subscriptionRepository) {
         this.subscriptionRepository = subscriptionRepository;
     }
 
-    public Page<SubscriptionDTO> findAll(Pageable pageable){
+    public Page<SubscriptionDTO> findAll(Pageable pageable) {
         Page<Subscription> Subscriptions = subscriptionRepository.findAll(pageable);
 
         return Subscriptions.map(this::toDTO);
@@ -38,19 +44,19 @@ public class SubscriptionService {
         }
     }
 
-    public SubscriptionDTO findById(Long id){
-        Subscription Subscription = subscriptionRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Assinatura não encontrada"));
+    public SubscriptionDTO findById(Long id) {
+        Subscription Subscription = subscriptionRepository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Assinatura não encontrada"));
         return toDTO(Subscription);
     }
 
-    public SubscriptionDTO save(SubscriptionDTO subscriptionDTO){
+    public SubscriptionDTO save(SubscriptionDTO subscriptionDTO) {
         Subscription subscription = toEntity(subscriptionDTO);
         subscription = subscriptionRepository.save(subscription);
 
         return toDTO(subscription);
     }
 
-    public SubscriptionDTO update(Long id, SubscriptionDTO subscriptionDTO){
+    public SubscriptionDTO update(Long id, SubscriptionDTO subscriptionDTO) {
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
             subscription.setName(subscriptionDTO.name());
@@ -65,11 +71,11 @@ public class SubscriptionService {
         }
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         subscriptionRepository.deleteById(id);
     }
 
-    public SubscriptionDTO setBalance(Long id, int consumo){
+    public SubscriptionDTO setBalance(Long id, int consumo) {
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
             if (consumo <= subscription.getBalance()) {
@@ -78,7 +84,7 @@ public class SubscriptionService {
                 subscription.setUpdatedAt(LocalDateTime.now());
                 subscription = subscriptionRepository.save(subscription);
                 return toDTO(subscription);
-            }else{
+            } else {
                 throw new ControllerInsufficientBalanceException("Saldo insuficiente");
             }
         } catch (EntityNotFoundException e) {
@@ -86,7 +92,7 @@ public class SubscriptionService {
         }
     }
 
-    public SubscriptionDTO setStatus(Long id, int status){
+    public SubscriptionDTO setStatus(Long id, int status) {
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
             subscription.setStatus(status);
@@ -114,7 +120,7 @@ public class SubscriptionService {
     }
 
 
-    private Subscription toEntity(SubscriptionDTO subscriptionDTO){
+    private Subscription toEntity(SubscriptionDTO subscriptionDTO) {
         return new Subscription(
                 subscriptionDTO.id(),
                 subscriptionDTO.name(),
@@ -126,6 +132,31 @@ public class SubscriptionService {
                 subscriptionDTO.status(),
                 subscriptionDTO.createdAt(),
                 subscriptionDTO.updatedAt()
+        );
+    }
+
+    public SubscriptionDTO requestToDTO(SubscriptionRequest subscriptionRequest) {
+        Subscription subscription = new Subscription();
+
+        Drink drink = new Drink();
+        drink.setId(subscriptionRequest.drinkId());
+        subscription.setDrink(drink);
+
+        User user = new User();
+        user.setId(subscriptionRequest.userId());
+        subscription.setUser(user);
+
+        return new SubscriptionDTO(
+                null,
+                subscriptionRequest.name(),
+                subscriptionRequest.description(),
+                user,
+                drink,
+                subscriptionRequest.size(),
+                subscriptionRequest.balance(),
+                subscriptionRequest.status(),
+                null,
+                null
         );
     }
 }

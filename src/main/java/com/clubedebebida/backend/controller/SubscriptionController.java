@@ -1,6 +1,7 @@
 package com.clubedebebida.backend.controller;
 
 import com.clubedebebida.backend.controller.request.SubscriptionRequest;
+import com.clubedebebida.backend.dto.SaleDTO;
 import com.clubedebebida.backend.dto.SubscriptionDTO;
 import com.clubedebebida.backend.model.Drink;
 import com.clubedebebida.backend.model.User;
@@ -42,27 +43,7 @@ public class SubscriptionController {
 
     @PostMapping
     public ResponseEntity<SubscriptionDTO> save(@Valid @RequestBody SubscriptionRequest subscriptionRequest) {
-
-        var user = new User();
-        user.setId(subscriptionRequest.userId());
-
-        var drink = new Drink();
-        drink.setId(subscriptionRequest.drinkId());
-
-        SubscriptionDTO savedSubscription = subscriptionService.save(
-                new SubscriptionDTO(
-                        null,
-                        subscriptionRequest.name(),
-                        subscriptionRequest.description(),
-                        user,
-                        drink,
-                        subscriptionRequest.size(),
-                        subscriptionRequest.balance(),
-                        subscriptionRequest.status(),
-                        null,
-                        null
-                )
-        );
+        SubscriptionDTO savedSubscription = subscriptionService.save(subscriptionService.requestToDTO(subscriptionRequest));
 
         return new ResponseEntity<>(savedSubscription, HttpStatus.CREATED);
     }
