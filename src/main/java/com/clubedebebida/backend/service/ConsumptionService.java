@@ -3,7 +3,6 @@ package com.clubedebebida.backend.service;
 import com.clubedebebida.backend.controller.exception.ControllerNotFoundException;
 import com.clubedebebida.backend.controller.request.ConsumptionRequest;
 import com.clubedebebida.backend.model.Consumption;
-import com.clubedebebida.backend.model.Sale;
 import com.clubedebebida.backend.model.Subscription;
 import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.repository.ConsumptionRepository;
