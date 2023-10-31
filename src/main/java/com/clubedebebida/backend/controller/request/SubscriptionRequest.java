@@ -11,8 +11,9 @@ public record SubscriptionRequest(
 
         String description,
 
+        @Min(value = 1L, message = "O usuário deve ser informada")
         Long userId,
-
+        @Min(value = 1L, message = "A bebida deve ser informada")
         Long drinkId,
 
         @Min(value = 1L, message = "A quantidade deve ser informada")

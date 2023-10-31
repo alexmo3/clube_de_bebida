@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public record SubscriptionDTO(
     Long id,
 
-    @NotBlank(message = "O nome deve ser informado")
+    //@NotBlank(message = "O nome deve ser informado")
     String name,
 
     String description,
@@ -27,7 +27,7 @@ public record SubscriptionDTO(
     //@Min(value = 1L, message = "A bebida deve ser informada")
     Drink drink,
 
-    @Min(value = 1L, message = "A quantidade deve ser informada")
+    //@Min(value = 1L, message = "A quantidade deve ser informada")
     int size,
 
     int balance,

@@ -2,7 +2,7 @@ package com.clubedebebida.backend.controller;
 
 import com.clubedebebida.backend.controller.request.SaleRequest;
 import com.clubedebebida.backend.dto.SaleDTO;
-import com.clubedebebida.backend.model.Sale;
+import com.clubedebebida.backend.dto.SubscriptionDTO;
 import com.clubedebebida.backend.model.Subscription;
 import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.SaleService;
@@ -14,6 +14,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.Flow;
 
 @RestController
 @RequestMapping("/vendas")
@@ -27,7 +29,7 @@ public class SaleController {
 
     @GetMapping
     public ResponseEntity<Page<SaleDTO>> findAll(
-            @PageableDefault(size = 10, page = 0, sort = "name") Pageable pageable
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable
     ) {
         Page<SaleDTO> salesDTO = saleService.findAll(pageable);
 
@@ -43,6 +45,12 @@ public class SaleController {
 
     @PostMapping
     public ResponseEntity<SaleDTO> save(@Valid @RequestBody SaleRequest saleRequest) {
+        Subscription subscription = new Subscription();
+        subscription.setId(saleRequest.subscriptionId());
+
+        User waiter = new User();
+        waiter.setId(saleRequest.waiterId());
+
         SaleDTO savedSale = saleService.save(saleService.requestToDTO(saleRequest));
 
         return new ResponseEntity<>(savedSale, HttpStatus.CREATED);

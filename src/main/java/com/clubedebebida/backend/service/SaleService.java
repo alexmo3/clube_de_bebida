@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -46,15 +47,16 @@ public class SaleService {
     public SaleDTO update(Long id, SaleDTO saleDTO){
         try {
             Sale sale = saleRepository.getReferenceById(id);
-            sale.setPrice(saleDTO.price());
-            sale.setWaiter(saleDTO.waiter());
-            sale.setSubscription(saleDTO.subscription());
+
+            if (saleDTO.price() != null)
+                sale.setPrice(saleDTO.price());
+
             sale.setUpdatedAt(LocalDateTime.now());
             sale = saleRepository.save(sale);
             return toDTO(sale);
 
         } catch (EntityNotFoundException e) {
-            throw new ControllerNotFoundException("Consumo não encontrada");
+            throw new ControllerNotFoundException("Venda não encontrada");
         }
     }
 

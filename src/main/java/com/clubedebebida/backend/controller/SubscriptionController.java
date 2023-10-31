@@ -43,6 +43,12 @@ public class SubscriptionController {
 
     @PostMapping
     public ResponseEntity<SubscriptionDTO> save(@Valid @RequestBody SubscriptionRequest subscriptionRequest) {
+        User user = new User();
+        user.setId(subscriptionRequest.userId());
+
+        Drink drink = new Drink();
+        drink.setId(subscriptionRequest.drinkId());
+
         SubscriptionDTO savedSubscription = subscriptionService.save(subscriptionService.requestToDTO(subscriptionRequest));
 
         return new ResponseEntity<>(savedSubscription, HttpStatus.CREATED);
@@ -70,22 +76,22 @@ public class SubscriptionController {
     }
 
     @PutMapping("/{id}/baixar")
-    public ResponseEntity<SubscriptionDTO> setBalanceDown(@PathVariable Long id, @RequestParam int consumo) {
-        SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, consumo);
+    public ResponseEntity<SubscriptionDTO> setBalanceDown(@PathVariable Long id, @RequestBody SubscriptionDTO subscriptionDTO) {
+        SubscriptionDTO updatedSubscription = subscriptionService.setBalanceDown(id, subscriptionDTO.balance());
 
         return ResponseEntity.ok(updatedSubscription);
     }
 
     @PutMapping("/{id}/cancelar")
-    public ResponseEntity<SubscriptionDTO> setBalanceUp(@PathVariable Long id, @RequestParam int consumo) {
-        SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, consumo);
+    public ResponseEntity<SubscriptionDTO> setBalanceUp(@PathVariable Long id, @RequestBody SubscriptionDTO subscriptionDTO) {
+        SubscriptionDTO updatedSubscription = subscriptionService.setBalanceUp(id, subscriptionDTO.balance());
 
         return ResponseEntity.ok(updatedSubscription);
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<SubscriptionDTO> setStatus(@PathVariable Long id, @RequestParam int status) {
-        SubscriptionDTO updatedSubscription = subscriptionService.setBalance(id, status);
+    public ResponseEntity<SubscriptionDTO> setStatus(@PathVariable Long id, @RequestBody SubscriptionDTO subscriptionDTO) {
+        SubscriptionDTO updatedSubscription = subscriptionService.setStatus(id, subscriptionDTO.status());
 
         return ResponseEntity.ok(updatedSubscription);
     }

@@ -72,13 +72,27 @@ public class UserService {
     public UserDTO update(Long id, UserDTO UserDTO) {
         try {
             User user = userRepository.getReferenceById(id);
+
             user.setType(UserDTO.type());
-            user.setName(UserDTO.name());
-            user.setEmail(UserDTO.email());
-            user.setPhone(UserDTO.phone());
-            user.setPhoto(UserDTO.photo());
-            user.setBirthday(UserDTO.birthday());
-            user.setPassword(UserDTO.password());
+
+            if (UserDTO.name() != null)
+                 user.setName(UserDTO.name());
+
+            if (UserDTO.email() != null)
+                user.setEmail(UserDTO.email());
+
+            if (UserDTO.phone() != null)
+                user.setPhone(UserDTO.phone());
+
+            if (UserDTO.photo() != null)
+                user.setPhoto(UserDTO.photo());
+
+            if (UserDTO.birthday() != null)
+                user.setBirthday(UserDTO.birthday());
+
+            if (UserDTO.password() != null)
+                user.setPassword(UserDTO.password());
+
             user.setUpdatedAt(LocalDateTime.now());
             user = userRepository.save(user);
             return toDTO(user);

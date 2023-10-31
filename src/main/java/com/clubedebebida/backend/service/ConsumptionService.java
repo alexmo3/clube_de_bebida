@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -22,35 +23,37 @@ public class ConsumptionService {
     private final ConsumptionRepository consumptionRepository;
 
     @Autowired
-    public ConsumptionService(ConsumptionRepository consumptionRepository){
+    public ConsumptionService(ConsumptionRepository consumptionRepository) {
         this.consumptionRepository = consumptionRepository;
     }
 
-    public Page<ConsumptionDTO> findAll(Pageable pageable){
+    public Page<ConsumptionDTO> findAll(Pageable pageable) {
         Page<Consumption> consumptions = consumptionRepository.findAll(pageable);
 
         return consumptions.map(this::toDTO);
     }
 
-    public ConsumptionDTO findById(Long id){
-        Consumption consumption = consumptionRepository.findById(id).orElseThrow(()-> new ControllerNotFoundException("Consumo não encontrado"));
+    public ConsumptionDTO findById(Long id) {
+        Consumption consumption = consumptionRepository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Consumo não encontrado"));
         return toDTO(consumption);
     }
 
-    public ConsumptionDTO save(ConsumptionDTO consumptionDTO){
+    public ConsumptionDTO save(ConsumptionDTO consumptionDTO) {
         Consumption consumption = toEntity(consumptionDTO);
         consumption = consumptionRepository.save(consumption);
 
         return toDTO(consumption);
     }
 
-    public ConsumptionDTO update(Long id, ConsumptionDTO consumptionDTO){
+    public ConsumptionDTO update(Long id, ConsumptionDTO consumptionDTO) {
         try {
             Consumption consumption = consumptionRepository.getReferenceById(id);
-            consumption.setPrice(consumptionDTO.price());
-            consumption.setTotal(consumptionDTO.total());
-            consumption.setWaiter(consumptionDTO.waiter());
-            consumption.setSubscription(consumptionDTO.subscription());
+            if (consumptionDTO.price().compareTo(BigDecimal.ZERO) != 0)
+                consumption.setPrice(consumptionDTO.price());
+
+            if (consumptionDTO.total() != 0)
+                consumption.setTotal(consumptionDTO.total());
+
             consumption.setUpdatedAt(LocalDateTime.now());
             consumption = consumptionRepository.save(consumption);
             return toDTO(consumption);
@@ -60,7 +63,7 @@ public class ConsumptionService {
         }
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         consumptionRepository.deleteById(id);
     }
 
@@ -76,7 +79,7 @@ public class ConsumptionService {
         );
     }
 
-    private Consumption toEntity(ConsumptionDTO consumptionDTO){
+    private Consumption toEntity(ConsumptionDTO consumptionDTO) {
         return new Consumption(
                 consumptionDTO.id(),
                 consumptionDTO.subscription(),
@@ -88,7 +91,7 @@ public class ConsumptionService {
         );
     }
 
-    private ConsumptionDTO requestToDTO(ConsumptionRequest consumptionRequest) {
+    public ConsumptionDTO requestToDTO(ConsumptionRequest consumptionRequest) {
         Consumption consumption = new Consumption();
 
         Subscription subscription = new Subscription();

@@ -55,9 +55,15 @@ public class SubscriptionService {
     public SubscriptionDTO update(Long id, SubscriptionDTO subscriptionDTO) {
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
-            subscription.setName(subscriptionDTO.name());
-            subscription.setSize(subscriptionDTO.size());
-            subscription.setDescription(subscriptionDTO.description());
+            if (subscriptionDTO.name() != null)
+                subscription.setName(subscriptionDTO.name());
+
+            if (subscriptionDTO.size() != 0)
+                subscription.setSize(subscriptionDTO.size());
+
+            if (subscriptionDTO.description() != null)
+                subscription.setDescription(subscriptionDTO.description());
+
             subscription.setUpdatedAt(LocalDateTime.now());
             subscription = subscriptionRepository.save(subscription);
             return toDTO(subscription);
@@ -71,17 +77,34 @@ public class SubscriptionService {
         subscriptionRepository.deleteById(id);
     }
 
-    public SubscriptionDTO setBalance(Long id, int consumo) {
+    public SubscriptionDTO setBalanceDown(Long id, int consumo) {
         try {
             Subscription subscription = subscriptionRepository.getReferenceById(id);
             if (consumo <= subscription.getBalance()) {
-                int newBalance = consumo - subscription.getBalance();
+                int newBalance = subscription.getBalance() - consumo;
                 subscription.setBalance(newBalance);
                 subscription.setUpdatedAt(LocalDateTime.now());
                 subscription = subscriptionRepository.save(subscription);
                 return toDTO(subscription);
             } else {
                 throw new ControllerInsufficientBalanceException("Saldo insuficiente");
+            }
+        } catch (EntityNotFoundException e) {
+            throw new ControllerNotFoundException("Assinatura não encontrada");
+        }
+    }
+
+    public SubscriptionDTO setBalanceUp(Long id, int consumo) {
+        try {
+            Subscription subscription = subscriptionRepository.getReferenceById(id);
+            if (consumo <= subscription.getSize()) {
+                int newBalance = subscription.getBalance() + consumo;
+                subscription.setBalance(newBalance);
+                subscription.setUpdatedAt(LocalDateTime.now());
+                subscription = subscriptionRepository.save(subscription);
+                return toDTO(subscription);
+            } else {
+                throw new ControllerInsufficientBalanceException("Maior que o máximo");
             }
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Assinatura não encontrada");

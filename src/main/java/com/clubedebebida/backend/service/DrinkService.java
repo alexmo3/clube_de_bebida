@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 
 @Service
-//User getUserById(Long id);
 public class DrinkService {
     private final DrinkRepository drinkRepository;
 
@@ -43,13 +42,27 @@ public class DrinkService {
     public DrinkDTO update(Long id, DrinkDTO drinkDTO){
         try {
             Drink drink = drinkRepository.getReferenceById(id);
-            drink.setName(drinkDTO.name());
-            drink.setDescription(drinkDTO.description());
-            drink.setType(drinkDTO.type());
-            drink.setUnit(drinkDTO.unit());
-            drink.setVolume(drinkDTO.volume());
-            drink.setStock(drinkDTO.stock());
-            drink.setMinStock(drinkDTO.minStock());
+            if (drinkDTO.name() != null)
+                drink.setName(drinkDTO.name());
+
+            if (drinkDTO.description() != null)
+                drink.setDescription(drinkDTO.description());
+
+            if (drinkDTO.type() != 0)
+                drink.setType(drinkDTO.type());
+
+            if (drinkDTO.unit() != null)
+                drink.setUnit(drinkDTO.unit());
+
+            if (drinkDTO.volume() != 0)
+                drink.setVolume(drinkDTO.volume());
+
+            if (drinkDTO.stock() != 0)
+                drink.setStock(drinkDTO.stock());
+
+            if (drinkDTO.minStock() != 0)
+                drink.setMinStock(drinkDTO.minStock());
+
             drink.setUpdatedAt(LocalDateTime.now());
             drink = drinkRepository.save(drink);
             return toDTO(drink);

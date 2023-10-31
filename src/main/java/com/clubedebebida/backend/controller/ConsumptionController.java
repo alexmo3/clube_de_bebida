@@ -1,7 +1,13 @@
 
 package com.clubedebebida.backend.controller;
 
+import com.clubedebebida.backend.controller.request.ConsumptionRequest;
+import com.clubedebebida.backend.controller.request.SaleRequest;
 import com.clubedebebida.backend.dto.ConsumptionDTO;
+import com.clubedebebida.backend.dto.SaleDTO;
+import com.clubedebebida.backend.model.Sale;
+import com.clubedebebida.backend.model.Subscription;
+import com.clubedebebida.backend.model.User;
 import com.clubedebebida.backend.service.ConsumptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +30,7 @@ public class ConsumptionController {
 
     @GetMapping
     public ResponseEntity<Page<ConsumptionDTO>> findAll(
-            @PageableDefault(size = 10, page = 0, sort = "name") Pageable pageable
+            @PageableDefault(size = 10, page = 0, sort = "id") Pageable pageable
     ) {
         Page<ConsumptionDTO> consumptionsDTO = consumptionService.findAll(pageable);
 
@@ -39,9 +45,14 @@ public class ConsumptionController {
     }
 
     @PostMapping
-    public ResponseEntity<ConsumptionDTO> save(@Valid @RequestBody ConsumptionDTO consumptionDTO) {
-        ConsumptionDTO savedConsumption = consumptionService.save(consumptionDTO);
+    public ResponseEntity<ConsumptionDTO> save(@Valid @RequestBody ConsumptionRequest consumptionRequest) {
+        Subscription subscription = new Subscription();
+        subscription.setId(consumptionRequest.subscriptionId());
 
+        User waiter = new User();
+        waiter.setId(consumptionRequest.waiterId());
+
+        ConsumptionDTO savedConsumption = consumptionService.save(consumptionService.requestToDTO(consumptionRequest));
         return new ResponseEntity<>(savedConsumption, HttpStatus.CREATED);
     }
 
