@@ -64,11 +64,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserLoginRequest> login(@Valid @RequestBody UserLoginRequest loginRequest) {
-        User user = new User(loginRequest.id(), loginRequest.email(),loginRequest.password());
+        User user = new User(loginRequest.id(), loginRequest.email(), loginRequest.password());
 
         UserLoginRequest userLoginRequest = userService.login(user.getEmail(), user.getPassword());
         if (userLoginRequest != null) {
-            return ResponseEntity.ok(loginRequest);
+            return ResponseEntity.ok(userLoginRequest);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

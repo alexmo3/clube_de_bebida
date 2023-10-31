@@ -16,18 +16,14 @@ public record SubscriptionDTO(
 
     String description,
 
-    //@OneToMany(mappedBy = "user_id")
     @ManyToOne
     @JoinColumn(name = "user_id")
-    //@Min(value = 1L, message = "O cliente deve ser informado")
     User user,
 
     @ManyToOne
     @JoinColumn(name = "drink_id")
-    //@Min(value = 1L, message = "A bebida deve ser informada")
     Drink drink,
 
-    //@Min(value = 1L, message = "A quantidade deve ser informada")
     int size,
 
     int balance,

@@ -24,12 +24,10 @@ public record UserDTO(
 
         @Past
         @NotNull(message = "A data de nascimento deve ser informada")
-        //@NotBlank(message = "A data de nascimento deve ser informada")
         LocalDate birthday,
 
         @NotBlank(message = "A senha deve ser informada")
-        @Min(value = 6, message = "A senha deve ter no mínimo 6 caracteres")
-        @Min(value = 20, message = "A senha deve ter no máximo 20 caracteres")
+        @Size(min = 6, max = 20, message = "A senha deve ter entre 6 e 20 caracteres")
         String password,
 
         LocalDateTime createdAt,
