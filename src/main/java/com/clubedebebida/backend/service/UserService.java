@@ -47,7 +47,7 @@ public class UserService {
             if (user != null && user.getPassword().equals(password)) {
                 return new UserLoginRequest(user.getId(), user.getName(), user.getEmail());
             } else {
-                return null; // Credenciais inválidas
+                throw new ControllerNotFoundException("Usuário não encontrado");
             }
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Usuário não encontrado");
@@ -62,7 +62,7 @@ public class UserService {
                 user = userRepository.save(user);
                 return new UserPasswordRequest(user.getId(), user.getEmail(), user.getPassword(),"");
             } else {
-                return null; // Credenciais inválidas
+                throw new ControllerNotFoundException("Usuário não encontrado");
             }
         } catch (EntityNotFoundException e) {
             throw new ControllerNotFoundException("Usuário não encontrado");
@@ -72,6 +72,7 @@ public class UserService {
     public UserDTO update(Long id, UserDTO UserDTO) {
         try {
             User user = userRepository.getReferenceById(id);
+            user.setType(UserDTO.type());
             user.setName(UserDTO.name());
             user.setEmail(UserDTO.email());
             user.setPhone(UserDTO.phone());
