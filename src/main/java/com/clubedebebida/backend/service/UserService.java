@@ -54,9 +54,9 @@ public class UserService {
         }
     }
 
-    public UserPasswordRequest changePassword(Long id, UserPasswordRequest userPasswordRequest) {
+    public UserPasswordRequest changePassword(UserPasswordRequest userPasswordRequest) {
         try {
-            User user = userRepository.findById(id).orElseThrow(() -> new ControllerNotFoundException("Usuário não encontrado"));
+            User user = userRepository.findByEmail(userPasswordRequest.email());
             if (user != null && user.getPassword().equals(userPasswordRequest.password())) {
                 user.setPassword(userPasswordRequest.newPassword());
                 user = userRepository.save(user);

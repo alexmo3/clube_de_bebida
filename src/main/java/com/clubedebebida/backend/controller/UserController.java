@@ -74,9 +74,9 @@ public class UserController {
         }
     }
 
-    @PutMapping("/novasenha/{id}")
-    public ResponseEntity<UserPasswordRequest> changePassword(@PathVariable("id") Long id, @RequestBody UserPasswordRequest userPasswordRequest){
-        UserPasswordRequest updatedUsuario = userService.changePassword(id, userPasswordRequest);
+    @PutMapping("/{id}/novasenha")
+    public ResponseEntity<UserPasswordRequest> changePassword(@RequestBody UserPasswordRequest userPasswordRequest){
+        UserPasswordRequest updatedUsuario = userService.changePassword(userPasswordRequest);
 
         return ResponseEntity.ok(updatedUsuario);
     }

@@ -63,8 +63,10 @@ public class SubscriptionController {
     }
 
     @GetMapping("/{id}/saldo")
-    public int getBalance(@PathVariable Long id) {
-        return subscriptionService.getBalanceById(id);
+    public ResponseEntity<SubscriptionDTO> getBalance(@PathVariable Long id) {
+        SubscriptionDTO updatedSubscription = subscriptionService.getBalanceById(id);
+
+        return ResponseEntity.ok(updatedSubscription);
     }
 
     @PutMapping("/{id}/baixar")

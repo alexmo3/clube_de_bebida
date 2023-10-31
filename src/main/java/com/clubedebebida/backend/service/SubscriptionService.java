@@ -31,13 +31,12 @@ public class SubscriptionService {
         return Subscriptions.map(this::toDTO);
     }
 
-    public int getBalanceById(Long id) {
+    public SubscriptionDTO getBalanceById(Long id) {
         Subscription subscription = this.subscriptionRepository.findById(id).orElse(null);
         if (subscription != null) {
-            return subscription.getBalance();
+            return toDTO(subscription);
         } else {
-            // Trate o caso em que nenhuma assinatura foi encontrada com o ID especificado.
-            return 0; // Pode retornar um valor padrão ou lançar uma exceção, dependendo dos requisitos.
+            return null; // Pode retornar um valor padrão ou lançar uma exceção, dependendo dos requisitos.
         }
     }
 
